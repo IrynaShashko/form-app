@@ -1,10 +1,12 @@
+import {
+  AuthenticationDetails,
+  CognitoUser,
+  CognitoUserAttribute,
+} from "amazon-cognito-identity-js";
 import React, { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
-
-import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { useAuth } from "./AuthContext";
 import { userPool } from "./awsConfig";
 
 const Register = () => {
@@ -17,6 +19,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
   const navigate = useNavigate();
+  const { setIsRegistered, setIsAuthenticated } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,10 +48,9 @@ const Register = () => {
           setError("Registration failed: " + err.message);
           return;
         }
-        alert(
-          "Registration successful! Please check your email for the confirmation code."
-        );
-        setIsConfirming(true);
+
+        alert("Registration successful! Please check your email for the confirmation code.");
+        setIsConfirming(true);  
       }
     );
   };
@@ -60,14 +62,32 @@ const Register = () => {
       Username: credentials.email,
       Pool: userPool,
     });
-    console.info("user registation", user);
+
     user.confirmRegistration(confirmationCode, true, (err, result) => {
       if (err) {
         setError("Confirmation failed: " + err.message);
         return;
       }
+
       alert("Registration confirmed! You can now log in.");
-      navigate("/login");
+
+      const authDetails = new AuthenticationDetails({
+        Username: credentials.email,
+        Password: credentials.password, 
+      });
+
+      user.authenticateUser(authDetails, {
+        onSuccess: (session) => {
+          alert("Login successful!");
+          localStorage.setItem("isAuthenticated", "true");
+          setIsAuthenticated(true);  
+          setIsRegistered(true); 
+          navigate("/"); 
+        },
+        onFailure: (err) => {
+          setError("Login failed: " + err.message);
+        },
+      });
     });
   };
 

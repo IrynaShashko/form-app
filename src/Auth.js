@@ -6,8 +6,7 @@ import Login from "./Login";
 import Register from "./Register";
 
 const AuthToggle = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
+  const [isLogin, setIsLogin] = useState(true); 
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };

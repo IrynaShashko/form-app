@@ -1,14 +1,21 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
-import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
+
+import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
+
+import { useAuth } from "./AuthContext";
 import { userPool } from "./awsConfig";
- // Імпортуємо User Pool
 
 const Login = () => {
+  const { setIsAuthenticated } = useAuth();
+
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,7 +24,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(""); // Очистити помилки перед новою спробою
+    setError("");
 
     const authDetails = new AuthenticationDetails({
       Username: credentials.email,
@@ -28,15 +35,15 @@ const Login = () => {
       Username: credentials.email,
       Pool: userPool,
     });
-    console.info("user login", user);
+
     user.authenticateUser(authDetails, {
       onSuccess: (session) => {
-        console.log("Login successful!", session);
         alert("Login successful!");
-        navigate("/"); 
+        localStorage.setItem("isAuthenticated", "true");
+        setIsAuthenticated(true);
+        navigate("/");
       },
       onFailure: (err) => {
-        console.error("Login failed:", err);
         setError(err.message || "Login failed!");
       },
     });

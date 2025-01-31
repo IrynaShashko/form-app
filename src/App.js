@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useAuth } from "react-oidc-context";
 import { Header } from "./Header";
 
+import { AuthProvider } from "./AuthContext";
 import lunchImage from "./lunch.jpg";
 
 const App = () => {
@@ -20,12 +21,14 @@ const App = () => {
   }
 
   return (
-    <Background>
-      <Header />
-      <MainContent>
-        <Outlet />
-      </MainContent>
-    </Background>
+    <AuthProvider>
+      <Background>
+        <Header />
+        <MainContent>
+          <Outlet />
+        </MainContent>
+      </Background>
+    </AuthProvider>
   );
 };
 

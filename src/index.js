@@ -12,6 +12,8 @@ import Lunch from "./Lunch";
 import reportWebVitals from "./reportWebVitals";
 
 import "./index.css";
+import Login from "./Login";
+import Register from "./Register";
 
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_pRzdJQJc2",
@@ -28,8 +30,8 @@ const Root = () => (
         <Route index element={<Home />} />
         <Route path="auth" element={<AuthToggle />} />
         <Route path="lunch" element={<Lunch />} />
-        {/* <Route path="login" element={<Login />} /> */}
-        {/* <Route path="register" element={<Register />}/> */}
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>
     </Routes>
   </Router>

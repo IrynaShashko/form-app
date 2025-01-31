@@ -25,8 +25,7 @@ export const Lunch = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const data = { ...formData }; // можна напряму використовувати formData
-
+    const data = { ...formData };
     try {
       await axios.post(
         "https://hook.eu2.make.com/9gphyruy4ss7e1ovweo38tsqtgmjrhse",
@@ -127,8 +126,8 @@ const StyledContainer = styled.div`
   border-radius: 16px;
   margin: auto;
   max-width: 400px;
-  padding: 40px;
   padding-top: 35px;
+  padding: 40px;
   position: relative;
 `;
 
